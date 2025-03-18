@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
-import 'package:traslater_sri/pages/SuggestionsPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:traslater_sri/pages/SuggestionsPage.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SuggestionsPage.dart';
 
 class TranslaterScreen extends StatefulWidget {
@@ -50,7 +50,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
       });
       detectImage(file!);
     } catch (e) {
-      print('Error picking image: \$e');
+      print('Error picking image: $e');
     }
   }
 
@@ -93,58 +93,67 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 238, 223, 53),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (_image != null)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.file(
-                  File(_image!.path),
-                  height: 200,
-                  width: 200,
-                  fit: BoxFit.cover,
-                ),
-              )
-            else
-              Text('No image selected', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: Text('Pick Image from Gallery'),
-            ),
-            SizedBox(height: 20),
-            if (v.isNotEmpty)
-              Container(
-                padding: EdgeInsets.all(12),
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  v,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                ),
-              ),
-            if (v.isNotEmpty)
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SuggestionsPage(
-                        recognizedText: v,
-                      ),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                if (_image != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.file(
+                      File(_image!.path),
+                      height: 200,
+                      width: 200,
+                      fit: BoxFit.cover,
                     ),
-                  );
-                },
-                child: Text('Go to Suggestions'),
-              ),
-          ],
+                  )
+                else
+                  Text('No image selected', style: TextStyle(fontSize: 16)),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _pickImage,
+                  child: Text('Pick Image from Gallery'),
+                ),
+                SizedBox(height: 20),
+                if (v.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.all(12),
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      v,
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                if (v.isNotEmpty)
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SuggestionsPage(
+                            recognizedText: v,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text('Go to Suggestions'),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

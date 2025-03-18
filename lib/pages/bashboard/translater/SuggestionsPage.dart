@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:traslater_sri/pages/SimilaritiesPage.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart';
 
 class SuggestionsPage extends StatefulWidget {
@@ -33,8 +32,8 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
     final List<String> suggestions = [
       "Similarities",
       "Unclear letters",
-      "Waste Disposal Methods",
-      "Eco-Friendly Alternatives"
+      "Era & Language",
+      ""
     ];
 
     return Scaffold(
