@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SuggestionsPage.dart';
+import 'package:traslater_sri/widgets/background_decoration.dart';
 
 class TranslaterScreen extends StatefulWidget {
   const TranslaterScreen({super.key});
@@ -86,71 +87,94 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Scan Image'),
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 238, 223, 53),
-      ),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                if (_image != null)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(_image!.path),
-                      height: 200,
-                      width: 200,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                else
-                  Text('No image selected', style: TextStyle(fontSize: 16)),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _pickImage,
-                  child: Text('Pick Image from Gallery'),
-                ),
-                SizedBox(height: 20),
-                if (v.isNotEmpty)
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
+    return BackgroundDecoration(
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // Ensures background visibility
+        appBar: AppBar(
+          title: const Text('Scan Image'),
+          centerTitle: true,
+          backgroundColor: Colors.orangeAccent.shade200.withOpacity(0.8),
+        ),
+        body: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.of(context).size.height,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  if (_image != null)
+                    ClipRRect(
                       borderRadius: BorderRadius.circular(8),
+                      child: Image.file(
+                        File(_image!.path),
+                        height: 200,
+                        width: 200,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  else
+                    const Text(
+                      'No image selected',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
-                    child: Text(
-                      v,
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                if (v.isNotEmpty)
+                  const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SuggestionsPage(
-                            recognizedText: v,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Text('Go to Suggestions'),
+                    onPressed: _pickImage,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text('Pick Image from Gallery'),
                   ),
-              ],
+                  const SizedBox(height: 20),
+                  if (v.isNotEmpty)
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        v,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  if (v.isNotEmpty)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SuggestionsPage(
+                              recognizedText: v,
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('Go to Suggestions'),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

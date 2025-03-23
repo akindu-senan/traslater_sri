@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: 18,
                             onPress: () {
                               if (formKey.currentState!.validate()) {
-                                authProvider.loginFuntion(context);
+                                authProvider.loginFunction(context);
                               }
                             },
                             buttonName: "Login",

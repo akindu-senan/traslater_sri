@@ -56,7 +56,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CommonTextFeild(
-                              controller: authProvider.signInusernameController,
+                              controller: authProvider.signInUsernameController,
                               label: "Name",
                               hint: "Name",
                               fullborder: true,
@@ -88,7 +88,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                     setState(() {
                                       // profileProvider.getshowConfPass ==
                                       //     !profileProvider.getshowConfPass;
-                                      authProvider.setenterPassword(
+                                      authProvider.setEnterPassword(
                                           !authProvider.getenterPassword);
                                     });
                                   },
@@ -113,7 +113,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
                                     setState(() {
                                       // profileProvider.getshowConfPass ==
                                       //     !profileProvider.getshowConfPass;
-                                      authProvider.setshowConfPass(
+                                      authProvider.setShowConfPass(
                                           !authProvider.getshowConfPass);
                                     });
                                   },

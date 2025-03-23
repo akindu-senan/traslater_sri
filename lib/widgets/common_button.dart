@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:traslater_sri/utils/colors.dart';
 
@@ -21,14 +19,6 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPress,
-      child: Text(
-        "${buttonName}",
-        style: TextStyle(
-          color: textColor ?? kDefTextColor,
-          fontSize: fontSize ?? 14,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
       style: ButtonStyle(
         backgroundColor: MaterialStatePropertyAll(
           backgroundColor,
@@ -39,6 +29,14 @@ class CommonButton extends StatelessWidget {
                 BorderRadius.circular(10), // Removes the border radius
             side: BorderSide.none, // Removes the border
           ),
+        ),
+      ),
+      child: Text(
+        buttonName,
+        style: TextStyle(
+          color: textColor ?? kDefTextColor,
+          fontSize: fontSize ?? 14,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );

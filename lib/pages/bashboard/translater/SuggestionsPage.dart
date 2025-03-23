@@ -1,6 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart';
+import 'package:traslater_sri/widgets/common_dashboard_btn.dart';
 
 class SuggestionsPage extends StatefulWidget {
   final String recognizedText;
@@ -27,39 +30,49 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
     });
   }
 
+  final List<Map<String, dynamic>> suggestions = [
+    {"title": "Similarities", "icon": FontAwesomeIcons.link},
+    {"title": "Unclear letters", "icon": FontAwesomeIcons.questionCircle},
+    {"title": "Era & Language", "icon": FontAwesomeIcons.book},
+    {"title": "Other", "icon": FontAwesomeIcons.ellipsisH},
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final List<String> suggestions = [
-      "Similarities",
-      "Unclear letters",
-      "Era & Language",
-      ""
-    ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Suggestions"),
-        backgroundColor: Colors.blue,
+        backgroundColor: const Color.fromARGB(255, 243, 180, 33),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(16),
-              itemCount: suggestions.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
-                  margin: EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    title: Text(
-                      suggestions[index],
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/background_cover_picture.jpg"),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(color: Colors.black.withOpacity(0.2)),
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: suggestions.map((item) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: CommonDashboardButton(
+                    icon: Icon(
+                      item['icon'],
+                      size: 45,
+                      color: Colors.white,
                     ),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue),
+                    discription: item['title'],
                     onTap: () {
-                      if (suggestions[index] == "Similarities") {
+                      if (item['title'] == "Similarities") {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -72,14 +85,14 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                SuggestionDetailPage(title: suggestions[index]),
+                                Placeholder(), // Replace with actual page
                           ),
                         );
                       }
                     },
                   ),
                 );
-              },
+              }).toList(),
             ),
           ),
         ],
