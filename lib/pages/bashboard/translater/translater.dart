@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:traslater_sri/pages/SuggestionsPage.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SuggestionsPage.dart';
 
 class TranslaterScreen extends StatefulWidget {
