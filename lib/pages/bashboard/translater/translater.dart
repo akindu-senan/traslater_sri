@@ -17,8 +17,8 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   File? file;
-  List<Map<String, dynamic>>? _recognitions;
-  String v = "";
+  List? _recognitions;
+  String displayText = "";
   List<String> recentRecognitions = [];
 
   @override
@@ -57,7 +57,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   }
 
   Future<void> detectImage(File image) async {
-    final recognitions = await Tflite.runModelOnImage(
+    var recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 6,
       threshold: 0.05,
@@ -65,14 +65,22 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
       imageStd: 127.5,
     );
 
-    if (recognitions != null) {
+    if (recognitions != null && recognitions.isNotEmpty) {
+      // Cast each result safely to Map<String, dynamic>
+      final top = Map<String, dynamic>.from(recognitions[0]);
+      final label = top['label'];
+      final confidence = (top['confidence'] * 100).toStringAsFixed(2);
+
       setState(() {
-        _recognitions = (recognitions as List)
-            .map((e) => Map<String, dynamic>.from(e as Map))
-            .toList();
-        v = _recognitions.toString();
+        _recognitions = recognitions;
+        displayText = 'Top Match: $label\nConfidence: $confidence%';
       });
-      saveRecentRecognition(v);
+
+      saveRecentRecognition(label);
+    } else {
+      setState(() {
+        displayText = "No recognizable character found.";
+      });
     }
   }
 
@@ -111,7 +119,6 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   if (_image != null)
                     ClipRRect(
@@ -141,7 +148,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                     child: const Text('Pick Image from Gallery'),
                   ),
                   const SizedBox(height: 20),
-                  if (_recognitions != null && _recognitions!.isNotEmpty)
+                  if (displayText.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.all(10),
@@ -149,27 +156,24 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                         color: Colors.black.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _recognitions!.map((recog) {
-                          return Text(
-                            "${recog['label']} - ${(recog['confidence'] * 100).toStringAsFixed(2)}%",
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          );
-                        }).toList(),
+                      child: Text(
+                        displayText,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  if (v.isNotEmpty)
+                  if (displayText.isNotEmpty)
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => SuggestionsPage(
-                              recognizedText: v,
+                              recognizedText: displayText,
                             ),
                           ),
                         );

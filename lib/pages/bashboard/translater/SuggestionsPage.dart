@@ -46,6 +46,7 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
       ),
       body: Stack(
         children: [
+          // Background image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -54,10 +55,12 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
               ),
             ),
           ),
+          // Blurring background for visual effect
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             child: Container(color: Colors.black.withOpacity(0.2)),
           ),
+          // Center content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +83,26 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                                 recentRecognitions: recentRecognitions),
                           ),
                         );
-                      } else {
+                      } else if (item['title'] == "Unclear letters") {
+                        // Navigate to a new page for Unclear letters
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Placeholder(), // Replace with actual page
+                          ),
+                        );
+                      } else if (item['title'] == "Era & Language") {
+                        // Navigate to a new page for Era & Language
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Placeholder(), // Replace with actual page
+                          ),
+                        );
+                      } else if (item['title'] == "Other") {
+                        // Navigate to a new page for Other
                         Navigator.push(
                           context,
                           MaterialPageRoute(
