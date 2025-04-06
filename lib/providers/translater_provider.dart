@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:traslater_sri/model/image_model.dart';
 import 'dart:developer' as dev;
 // import 'package:get/get.dart';
-import 'package:traslater_sri/widgets/common_popups.dart';
 
 class TranslaterProvider extends ChangeNotifier {
   final ImagePicker _picker = ImagePicker();

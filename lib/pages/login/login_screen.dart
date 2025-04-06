@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:traslater_sri/pages/bashboard/dashboard.dart';
 import 'package:traslater_sri/pages/sign_up/sing_up_screen.dart';
 import 'package:traslater_sri/providers/auth_provider.dart';
 import 'package:traslater_sri/utils/colors.dart';
 import 'package:traslater_sri/utils/main_body.dart';
+// ignore: depend_on_referenced_packages
 import 'package:provider/provider.dart';
 import 'package:traslater_sri/widgets/common_button.dart';
 import 'package:traslater_sri/widgets/common_textfeild.dart';
@@ -42,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -58,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 5,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(

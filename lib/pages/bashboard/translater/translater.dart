@@ -17,7 +17,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   File? file;
-  var _recognitions;
+  List<Map<String, dynamic>>? _recognitions;
   String v = "";
   List<String> recentRecognitions = [];
 
@@ -44,10 +44,12 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
       if (image == null) return;
+
       setState(() {
         _image = image;
         file = File(image.path);
       });
+
       detectImage(file!);
     } catch (e) {
       print('Error picking image: $e');
@@ -55,18 +57,23 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   }
 
   Future<void> detectImage(File image) async {
-    var recognitions = await Tflite.runModelOnImage(
+    final recognitions = await Tflite.runModelOnImage(
       path: image.path,
       numResults: 6,
       threshold: 0.05,
       imageMean: 127.5,
       imageStd: 127.5,
     );
-    setState(() {
-      _recognitions = recognitions;
-      v = recognitions.toString();
+
+    if (recognitions != null) {
+      setState(() {
+        _recognitions = (recognitions as List)
+            .map((e) => Map<String, dynamic>.from(e as Map))
+            .toList();
+        v = _recognitions.toString();
+      });
       saveRecentRecognition(v);
-    });
+    }
   }
 
   Future<void> saveRecentRecognition(String text) async {
@@ -89,7 +96,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   Widget build(BuildContext context) {
     return BackgroundDecoration(
       child: Scaffold(
-        backgroundColor: Colors.transparent, // Ensures background visibility
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Scan Image'),
           centerTitle: true,
@@ -134,7 +141,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                     child: const Text('Pick Image from Gallery'),
                   ),
                   const SizedBox(height: 20),
-                  if (v.isNotEmpty)
+                  if (_recognitions != null && _recognitions!.isNotEmpty)
                     Container(
                       padding: const EdgeInsets.all(12),
                       margin: const EdgeInsets.all(10),
@@ -142,14 +149,17 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                         color: Colors.black.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Text(
-                        v,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: _recognitions!.map((recog) {
+                          return Text(
+                            "${recog['label']} - ${(recog['confidence'] * 100).toStringAsFixed(2)}%",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   if (v.isNotEmpty)
