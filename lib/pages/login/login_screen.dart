@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Welcome back",
+                        "Welcome",
                         style: TextStyle(
                           color: kDefTextColor,
                           fontSize: 20,
