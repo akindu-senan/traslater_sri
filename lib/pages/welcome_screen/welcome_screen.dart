@@ -25,19 +25,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     'assets/images/welcome_image3.jpeg',
   ];
 
-  final List<Color> colorizeColors = [
-    Colors.purple,
-    Colors.blue,
-    Colors.yellow,
-    Colors.red,
-  ];
-
-  final TextStyle colorizeTextStyle = const TextStyle(
-    fontSize: 36.0,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Horizon',
-  );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,16 +65,29 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
               // Magical animated text
               Center(
-                child: AnimatedTextKit(
-                  animatedTexts: [
-                    ColorizeAnimatedText(
-                      'Welcome to Translator ශ්‍රී',
-                      textStyle: colorizeTextStyle,
-                      colors: colorizeColors,
-                    ),
-                  ],
-                  isRepeatingAnimation: false,
-                  totalRepeatCount: 1,
+                child: DefaultTextStyle(
+                  style: const TextStyle(
+                    fontSize: 45.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 12.0,
+                        color: Colors.black45,
+                        offset: Offset(3.0, 3.0),
+                      ),
+                    ],
+                  ),
+                  child: AnimatedTextKit(
+                    animatedTexts: [
+                      FadeAnimatedText("Welcome  To \n Translator ශ්‍රී",
+                          duration: Duration(
+                            seconds: 10,
+                          )),
+                      FadeAnimatedText("Get Start ")
+                    ],
+                    isRepeatingAnimation: false,
+                  ),
                 ),
               ),
 

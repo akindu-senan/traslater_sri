@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:traslater_sri/pages/bashboard/translater/translater.dart';
@@ -19,9 +20,10 @@ class Dashboard extends StatelessWidget {
       appBarbackgroundColor: Colors.orange.shade200,
       automaticallyImplyLeading: true,
       drawer: const CommonDrawer(),
-      appBarTitle: const Text("Traslater ශ්‍රී"),
+      appBarTitle: const Text("Translator ශ්‍රී"),
       container: Stack(
         children: [
+          // Background image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -30,16 +32,69 @@ class Dashboard extends StatelessWidget {
               ),
             ),
           ),
-          // Blur effect for background
+
+          // Blur overlay
           BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5), // Optimized blur
-            child: Container(color: Colors.black.withOpacity(0.1)),
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(color: Colors.black.withOpacity(0.2)),
           ),
+
+          // Center animated text
+          Stack(
+            children: [
+              // Background and blur effects here...
+
+              // Positioned animated text at the top
+              Positioned(
+                top: MediaQuery.of(context).size.height *
+                    0.08, // Adjust as needed
+                left: 20,
+                right: 20,
+                child: Center(
+                  child: DefaultTextStyle(
+                    style: const TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      height: 1.2,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 10.0,
+                          color: Colors.black54,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        FadeAnimatedText(
+                          "Welcome To\nTranslator ශ්‍රී",
+                          duration: const Duration(seconds: 4),
+                        ),
+                        FadeAnimatedText(
+                          "Get Start",
+                          duration: const Duration(seconds: 2),
+                        ),
+                      ],
+                      isRepeatingAnimation: false,
+                      pause: const Duration(seconds: 1),
+                      displayFullTextOnTap: true,
+                    ),
+                  ),
+                ),
+              ),
+
+              // Other widgets (like your bottom container) go here...
+            ],
+          ),
+
+          // Bottom panel with Translate button
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: screenHeight / 2,
-              width: screenWidth * 0.9, // Optimized width
+              height: screenHeight / 2.3,
+              width: screenWidth * 0.9,
               decoration: BoxDecoration(
                 color: Colors.black38,
                 border: Border.all(color: Colors.white30),
@@ -50,7 +105,7 @@ class Dashboard extends StatelessWidget {
               ),
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: CommonDashboardButton(
                     icon: const Icon(
                       FontAwesomeIcons.globe,
