@@ -41,6 +41,7 @@ flutter:
     - assets/images/
     - assets\labels.txt
     - assets\model_unquant.tflite
+    - assets/historic_terms.json
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

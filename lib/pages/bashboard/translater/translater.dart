@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SuggestionsPage.dart';
+import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart'; // Make sure import is correct
 import 'package:traslater_sri/widgets/background_decoration.dart';
 
 class TranslaterScreen extends StatefulWidget {
@@ -66,7 +67,6 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
     );
 
     if (recognitions != null && recognitions.isNotEmpty) {
-      // Cast each result safely to Map<String, dynamic>
       final top = Map<String, dynamic>.from(recognitions[0]);
       final label = top['label'];
       final confidence = (top['confidence'] * 100).toStringAsFixed(2);
@@ -76,7 +76,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
         displayText = 'Top Match: $label\nConfidence: $confidence%';
       });
 
-      saveRecentRecognition(label);
+      await saveRecentRecognition(label);
     } else {
       setState(() {
         displayText = "No recognizable character found.";
@@ -86,11 +86,11 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
 
   Future<void> saveRecentRecognition(String text) async {
     final prefs = await SharedPreferences.getInstance();
-    recentRecognitions.insert(0, text);
-    if (recentRecognitions.length > 5) {
-      recentRecognitions = recentRecognitions.sublist(0, 5);
+    recentRecognitions.insert(0, text.trim());
+    if (recentRecognitions.length > 10) {
+      recentRecognitions = recentRecognitions.sublist(0, 10);
     }
-    prefs.setStringList('recentRecognitions', recentRecognitions);
+    await prefs.setStringList('recentRecognitions', recentRecognitions);
   }
 
   Future<void> loadRecentRecognitions() async {
@@ -98,6 +98,17 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
     setState(() {
       recentRecognitions = prefs.getStringList('recentRecognitions') ?? [];
     });
+  }
+
+  void navigateToSimilarities() async {
+    final prefs = await SharedPreferences.getInstance();
+    List<String> saved = prefs.getStringList('recentRecognitions') ?? [];
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SimilaritiesPage(recentRecognitions: saved),
+      ),
+    );
   }
 
   @override
@@ -187,6 +198,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                       ),
                       child: const Text('Go to Suggestions'),
                     ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
