@@ -69,7 +69,7 @@ class Dashboard extends StatelessWidget {
                     child: AnimatedTextKit(
                       animatedTexts: [
                         FadeAnimatedText(
-                          "Welcome To\nTranslator ශ්‍රී",
+                          "Translate \n Manuscript",
                           duration: const Duration(seconds: 4),
                         ),
                         FadeAnimatedText(
