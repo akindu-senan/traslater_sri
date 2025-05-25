@@ -2,8 +2,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:traslater_sri/pages/bashboard/similar_letter/letter.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart';
 import 'package:traslater_sri/widgets/common_dashboard_btn.dart';
+import 'package:traslater_sri/pages/bashboard/similar_letter/letter.dart';
 
 class SuggestionsPage extends StatefulWidget {
   final String recognizedText;
@@ -88,8 +90,10 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                Placeholder(), // Replace with actual page
+                            builder: (context) => LetterPage(
+                              recognizedCharacters: [],
+                              unclearLetters: [],
+                            ), // Replace with actual page
                           ),
                         );
                       } else if (item['title'] == "Era & Language") {

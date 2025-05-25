@@ -4,7 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite_v2/tflite_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:traslater_sri/pages/bashboard/translater/SuggestionsPage.dart';
-import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart'; // Make sure import is correct
+import 'package:traslater_sri/pages/bashboard/translater/SimilaritiesPage.dart';
+import 'package:traslater_sri/pages/bashboard/similar_letter/letter.dart'; // NEW
 import 'package:traslater_sri/widgets/background_decoration.dart';
 
 class TranslaterScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   List? _recognitions;
   String displayText = "";
   List<String> recentRecognitions = [];
+  List<String> unclearLetters = []; // NEW
 
   @override
   void initState() {
@@ -58,9 +60,10 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
   }
 
   Future<void> detectImage(File image) async {
+    unclearLetters.clear(); // NEW
     var recognitions = await Tflite.runModelOnImage(
       path: image.path,
-      numResults: 6,
+      numResults: 10,
       threshold: 0.05,
       imageMean: 127.5,
       imageStd: 127.5,
@@ -75,6 +78,14 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
         _recognitions = recognitions;
         displayText = 'Top Match: $label\nConfidence: $confidence%';
       });
+
+      for (var r in recognitions) {
+        var map = Map<String, dynamic>.from(r);
+        double conf = (map['confidence'] ?? 0.0) * 100;
+        if (conf < 70.0) {
+          unclearLetters.add(map['label']);
+        }
+      }
 
       await saveRecentRecognition(label);
     } else {
@@ -197,6 +208,28 @@ class _TranslaterScreenState extends State<TranslaterScreen> {
                         ),
                       ),
                       child: const Text('Go to Suggestions'),
+                    ),
+                  if (unclearLetters.isNotEmpty)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LetterPage(
+                              unclearLetters: unclearLetters,
+                              recognizedCharacters: [],
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepOrange,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      child: const Text('View Unclear Letters'),
                     ),
                   const SizedBox(height: 20),
                 ],
